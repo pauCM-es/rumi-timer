@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Neucha&family=Roboto:wght@400;700&display=swap');
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  /* font-family: 'Amatic SC', cursive; */
+  font-family: 'Neucha', cursive;
+  /* font-family: 'Roboto', sans-serif; */
 }
