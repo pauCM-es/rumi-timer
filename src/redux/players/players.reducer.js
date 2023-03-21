@@ -20,7 +20,10 @@ export const playersReducer = ( state = INITIAL_STATE, action ) => {
 
     SET_PLAYER: {
       ...state,
-      playerList: [ ...state.playerList.filter(player => player.id !== action.index), action.payload ]
+      playerList: [ ...state.playerList.filter(player => player.id !== action.index), action.payload ].sort((a, b) => {
+        if(a.id < b.id) {return -1}
+        return 0
+      })
     },
 
     SET_PLAYER_PROPERTY: {
