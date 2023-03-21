@@ -12,11 +12,11 @@ export const gameReducer = ( state = INITIAL_STATE, action ) => {
     },
     ACCUMULATED_POT: {
       ...state,
-      potReward: potReward + action.payload
+      potReward: state.potReward + action.payload
     },
     NEXT_MATCH: {
       ...state,
-      matchId: matchId++
+      matchId: state.matchId++
     },
     GAMEOVER: {
       ...state,

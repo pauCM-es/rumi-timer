@@ -3,5 +3,5 @@ export const INITIAL_STATE = {
   lifePrice: 0.50,
   matchId: 0,
   potReward: 0,
-  isGameOcer: false
+  isGameOver: false
 }
