@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Landing = () => {
   return (
     <section
-    className='bg-gradient-to-tr from-fuchsia-500 to-cyan-500 h-screen w-screen flex flex-col items-center justify-center gap-20'
+    className='bg-gradient-to-tr from-fuchsia-500 to-cyan-500 h-screen w-screen flex-col-center gap-20'
     >
       <div className="text-white text-5xl text-center">
         LET'S PLAY RUMI!!!

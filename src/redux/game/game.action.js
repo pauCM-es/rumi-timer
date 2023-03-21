@@ -1,4 +1,4 @@
-import { store } from "../store";
+import store from "../store";
 const { dispatch } = store;
 
 export const setTime = ( time ) => {

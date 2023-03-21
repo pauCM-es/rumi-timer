@@ -13,3 +13,15 @@
   font-family: 'Neucha', cursive;
   /* font-family: 'Roboto', sans-serif; */
 }
+
+@layer components {
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center
+  }
+  .flex-center {
+    @apply flex items-center justify-center
+  }
+  .flex-center-wrap {
+    @apply flex flex-wrap items-center justify-center
+  }
+}

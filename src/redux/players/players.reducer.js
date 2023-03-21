@@ -32,7 +32,8 @@ export const playersReducer = ( state = INITIAL_STATE, action ) => {
           [action.property]: action.payload
         } 
       ].sort((a, b) => {
-        if(a.id < b.id) return -1
+        if(a.id < b.id) {return -1}
+        return 0
       })
     },
   }
