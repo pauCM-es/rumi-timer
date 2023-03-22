@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { RadioGroup } from "@headlessui/react";
-import { setPlayer, setPlayerProperty } from "../../redux/players/players.action";
+import { setPlayer } from "../../redux/players/players.action";
+import { characters } from "../../utils/characters";
 
 const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
   const colors = [
@@ -13,16 +14,17 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
     "#fcd34d",
   ];
   const [editingPlayer, setEditingPlayer] = useState(player);
-  const [colorSelected, setColorSelected] = useState(colors[0]);
+  const [colorSelected, setColorSelected] = useState(player.color);
+  const [characterSelected, setCharacterSelected] = useState(player.avatar);
 
   useEffect(() => {
     setEditingPlayer({
       ...editingPlayer,
       color: colorSelected,
+      avatar: characterSelected
     });
     console.log(editingPlayer);
-
-  }, [colorSelected]);
+  }, [colorSelected, characterSelected]);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -34,8 +36,8 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
 
   const savePlayer = (ev) => {
     ev.preventDefault();
-    setPlayer(editingPlayer.id, editingPlayer)
-    setIsOpen(false)
+    setPlayer(editingPlayer.id, editingPlayer);
+    setIsOpen(false);
   };
 
   return (
@@ -64,7 +66,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
             leaveTo="opacity-0"
           >
             <Dialog.Panel className="mx-auto max-w-sm rounded-lg bg-white p-3">
-              <Dialog.Title as="h2" className="font-bold mb-3">
+              <Dialog.Title as="h2" className="font-bold mb-5 text-center text-2xl">
                 EDIT PLAYER {editingPlayer.id}
               </Dialog.Title>
               <form onSubmit={savePlayer}>
@@ -73,7 +75,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                   <input
                     type="text"
                     name="alias"
-                    className="mt-2 mb-5"
+                    className="mt-2 mb-5 p-2 bg-slate-300 rounded-md"
                     value={editingPlayer.alias}
                     onChange={handleInput}
                   />
@@ -87,26 +89,58 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                   <RadioGroup.Label as="h3" className="flex w-full">
                     PICK A COLOR
                   </RadioGroup.Label>
-                  <div className="flex-center-wrap gap-3">
+                  <div className="flex-center-wrap justify-between">
                     {colors.map((color) => (
                       <RadioGroup.Option
-                        name="color"
                         key={color}
                         value={color}
                         style={{ background: `${color}` }}
                         className={({ checked }) =>
                           checked
-                            ? "ring-4 ring-zinc-500 rounded-md w-10 aspect-square"
-                            : "w-10 aspect-square rounded-md"
+                            ? "ring-4 ring-zinc-500 rounded-md w-10 aspect-square hover:scale-110"
+                            : "w-10 aspect-square rounded-md hover:scale-110"
                         }
                       ></RadioGroup.Option>
                     ))}
                   </div>
                 </RadioGroup>
 
-                <div className="flex gap-10 justify-center mt-10">
-                  <button onClick={() => setIsOpen(false)}>Cancel</button>
-                  <button type="submit">Save</button>
+                <RadioGroup
+                  value={characterSelected}
+                  onChange={setCharacterSelected}
+                  className="flex flex-col gap-3 mt-10"
+                >
+                  <RadioGroup.Label>CHOSE AVATAR</RadioGroup.Label>
+                  <div className="flex flex-wrap gap-3">
+                    {characters.lowerDecks.map((char) => (
+                        <RadioGroup.Option key={char} value={char}
+                        className={({ checked }) =>
+                        checked
+                          ? "ring-4 ring-amber-400 w-20 h-20 rounded-full hover:scale-110"
+                          : ""
+                      }
+                        >
+                            <img
+                              src={char}
+                              alt="avatar"
+                              className="w-20 h-20 object-cover rounded-full hover:scale-110"
+                            />
+                        </RadioGroup.Option>
+                    ))}
+                  </div>
+                </RadioGroup>
+
+                <div className="flex gap-10 justify-evenly my-10">
+                  <button 
+                  className="border b-2 border-rose-700 p-2 rounded-md w-36 text-rose-700 
+                  hover:bg-rose-700 hover:text-white" 
+                  onClick={() => setIsOpen(false)}
+                  >Cancel</button>
+                  <button 
+                  className="border b-2 border-teal-600 p-2 rounded-md w-36 text-teal-600
+                  hover:bg-teal-600 hover:text-white" 
+                  type="submit"
+                  >Save</button>
                 </div>
               </form>
             </Dialog.Panel>

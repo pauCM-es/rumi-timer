@@ -7,9 +7,9 @@ const PlayerItem = ( { player} ) => {
       <p>P{ player.id }</p>
       <div 
       style={{background: `${player.color}`}}
-      className='w-20 flex-center aspect-square rounded-full'>
+      className='w-24 flex-center aspect-square rounded-full'>
         <img 
-        className='w-3/5 aspect-square'
+        className='w-20 aspect-square rounded-full'
         src={ player.avatar } 
         alt={`avatar for player${ player.id }`} />
       </div>
