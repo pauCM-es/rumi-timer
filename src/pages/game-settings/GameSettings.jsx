@@ -94,11 +94,11 @@ const GameSettings = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-5 w-fit">
+          <div className="flex flex-wrap w-fit justify-between gap-y-5">
             {playerList.map((player) => {
               return (
                 <div className="flex-col-center">
-                  <PlayerItem key={player.id} player={player}></PlayerItem>
+                  <PlayerItem key={player.id} player={player} addItemClasses=""></PlayerItem>
                   <button
                     onClick={() => {
                       setPlayerToEdit(player)

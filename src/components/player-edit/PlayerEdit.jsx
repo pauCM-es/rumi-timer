@@ -14,8 +14,8 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
     "#fcd34d",
   ];
   const [editingPlayer, setEditingPlayer] = useState(player);
-  const [colorSelected, setColorSelected] = useState(player.color);
-  const [characterSelected, setCharacterSelected] = useState(player.avatar);
+  const [colorSelected, setColorSelected] = useState(player.color || colors[0]);
+  const [characterSelected, setCharacterSelected] = useState(player.avatar || characters[0]);
 
   useEffect(() => {
     setEditingPlayer({
