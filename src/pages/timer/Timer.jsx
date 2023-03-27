@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import PlayerItem from "../../components/player-item/PlayerItem";
-import PlayerList from "../../components/player-list/PlayerList";
+import PlayerItem from "../../components/PlayerItem";
+import PlayerList from "../../components/PlayerList";
 import { setPlayerProperty } from "../../redux/players/players.action";
 
 const Timer = () => {

@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { RadioGroup } from "@headlessui/react";
-import { setPlayer } from "../../redux/players/players.action";
-import { characters } from "../../utils/characters";
+import { setPlayer } from "../redux/players/players.action";
+import { characters } from "../utils/characters";
 
 const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
   const colors = [
@@ -15,13 +15,15 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
   ];
   const [editingPlayer, setEditingPlayer] = useState(player);
   const [colorSelected, setColorSelected] = useState(player.color || colors[0]);
-  const [characterSelected, setCharacterSelected] = useState(player.avatar || characters[0]);
+  const [characterSelected, setCharacterSelected] = useState(
+    player.avatar || characters[0]
+  );
 
   useEffect(() => {
     setEditingPlayer({
       ...editingPlayer,
       color: colorSelected,
-      avatar: characterSelected
+      avatar: characterSelected,
     });
     console.log(editingPlayer);
   }, [colorSelected, characterSelected]);
@@ -55,7 +57,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
           <div className="fixed inset-0 bg-black/70" aria-hidden="true" />
         </Transition.Child>
 
-        <div className="fixed inset-0 flex justify-center h-fit mt-14 p-4 text-xl">
+        <div className="fixed inset-0 flex justify-center items-center p-2 text-xl">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -65,11 +67,15 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Panel className="mx-auto max-w-sm rounded-lg bg-white p-3">
-              <Dialog.Title as="h2" className="font-bold mb-5 text-center text-2xl">
+            <Dialog.Panel className="mx-auto max-w-sm h-fit rounded-lg bg-white p-3">
+              <Dialog.Title
+                as="h2"
+                className="font-bold mb-5 text-center text-2xl"
+              >
                 EDIT PLAYER {editingPlayer.id}
               </Dialog.Title>
               <form onSubmit={savePlayer}>
+                {/* ---------------------- ALIAS ---------------------------------- */}
                 <label htmlFor="alias">
                   <h3> SELECT AN ALIAS</h3>
                   <input
@@ -80,7 +86,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                     onChange={handleInput}
                   />
                 </label>
-
+                {/* ---------------------- COLOR ---------------------------------- */}
                 <RadioGroup
                   value={colorSelected}
                   onChange={setColorSelected}
@@ -104,43 +110,49 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                     ))}
                   </div>
                 </RadioGroup>
-
+                {/* ---------------------- AVATAR ---------------------------------- */}
                 <RadioGroup
                   value={characterSelected}
                   onChange={setCharacterSelected}
                   className="flex flex-col gap-3 mt-10"
                 >
                   <RadioGroup.Label>CHOSE AVATAR</RadioGroup.Label>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap justify-between gap-y-3">
                     {characters.lowerDecks.map((char) => (
-                        <RadioGroup.Option key={char} value={char}
+                      <RadioGroup.Option
+                        key={char}
+                        value={char}
                         className={({ checked }) =>
-                        checked
-                          ? "ring-4 ring-amber-400 w-20 h-20 rounded-full hover:scale-110"
-                          : ""
-                      }
-                        >
-                            <img
-                              src={char}
-                              alt="avatar"
-                              className="w-20 h-20 object-cover rounded-full hover:scale-110"
-                            />
-                        </RadioGroup.Option>
+                          checked
+                            ? "w-[23%]"
+                            : "w-[23%] grayscale"
+                        }
+                      >
+                        <img
+                          src={char}
+                          alt="avatar"
+                          className=" aspect-square object-cover rounded-full hover:scale-110"
+                        />
+                      </RadioGroup.Option>
                     ))}
                   </div>
                 </RadioGroup>
-
-                <div className="flex gap-10 justify-evenly my-10">
-                  <button 
-                  className="border b-2 border-rose-700 p-2 rounded-md w-36 text-rose-700 
-                  hover:bg-rose-700 hover:text-white" 
-                  onClick={() => setIsOpen(false)}
-                  >Cancel</button>
-                  <button 
-                  className="border b-2 border-teal-600 p-2 rounded-md w-36 text-teal-600
-                  hover:bg-teal-600 hover:text-white" 
-                  type="submit"
-                  >Save</button>
+                {/* ---------------------- BUTTONS ---------------------------------- */}
+                <div className="flex gap-10 justify-evenly my-5">
+                  <button
+                    className="border b-2 border-rose-700 p-2 rounded-md w-36 text-rose-700 
+                  hover:bg-rose-700 hover:text-white"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="border b-2 border-teal-600 p-2 rounded-md w-36 text-teal-600
+                  hover:bg-teal-600 hover:text-white"
+                    type="submit"
+                  >
+                    Save
+                  </button>
                 </div>
               </form>
             </Dialog.Panel>
