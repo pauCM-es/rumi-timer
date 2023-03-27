@@ -25,7 +25,7 @@ const GameSettings = () => {
     <Fragment>
       { modalIsOpen && <PlayerEdit isOpen={modalIsOpen} setIsOpen={setModalIsOpen} player={playerToEdit}></PlayerEdit>}
 
-      <section className="fixed inset-0 h-screen p-5 flex flex-col items-center">
+      <section className="p-5 flex flex-col items-center">
         <h1 className="text-center text-xl font-bold">GAME SETTINGS</h1>
         <section className="w-full">
           <h3 className="mt-5 mb-3">TIME PER TURN (in seconds)</h3>
