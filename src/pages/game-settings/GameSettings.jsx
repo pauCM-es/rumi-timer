@@ -2,13 +2,14 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import PlayerItem from "../../components/player-item/PlayerItem";
-import PlayerEdit from "../../components/player-edit/PlayerEdit"
+import PlayerItem from "../../components/PlayerItem";
+import PlayerEdit from "../../components/PlayerEdit"
 import { setLifePrice, setTime } from "../../redux/game/game.action";
 import {
   addPlayer,
   removeLastPlayer,
 } from "../../redux/players/players.action";
+import PlayerList from "../../components/PlayerList";
 
 const GameSettings = () => {
   const { turnTime, lifePrice } = useSelector((state) => state.game);
@@ -25,8 +26,9 @@ const GameSettings = () => {
     <Fragment>
       { modalIsOpen && <PlayerEdit isOpen={modalIsOpen} setIsOpen={setModalIsOpen} player={playerToEdit}></PlayerEdit>}
 
-      <section className="fixed inset-0 h-screen p-5 flex flex-col items-center">
+      <section className="p-5 flex flex-col items-center">
         <h1 className="text-center text-xl font-bold">GAME SETTINGS</h1>
+        {/* ---------------------- TIME SETTING ---------------------------------- */}
         <section className="w-full">
           <h3 className="mt-5 mb-3">TIME PER TURN (in seconds)</h3>
           <div className="flex gap-5">
@@ -47,6 +49,7 @@ const GameSettings = () => {
             </button>
           </div>
         </section>
+        {/* ---------------------- PRICE SETTING ---------------------------------- */}
         <section className="w-full">
           <h3 className="mt-5 mb-3">PRICE TO COME FROM THE DEATH (€)</h3>
           <div className="flex gap-5">
@@ -71,6 +74,7 @@ const GameSettings = () => {
             </button>
           </div>
         </section>
+        {/* ---------------------- PLAYERS SETTINGS ---------------------------------- */}
         <section className="w-full my-3">
           <div className="flex gap-5">
             <h3 className="mt-5 mb-3">PLAYERS</h3>
@@ -93,25 +97,17 @@ const GameSettings = () => {
               </button>
             </div>
           </div>
-
-          <div className="flex flex-wrap w-fit justify-between gap-y-5">
-            {playerList.map((player) => {
-              return (
-                <div className="flex-col-center">
-                  <PlayerItem key={player.id} player={player} addItemClasses=""></PlayerItem>
-                  <button
-                    onClick={() => {
-                      setPlayerToEdit(player)
-                      setModalIsOpen(true)
-                    }}
-                    className="border border-slate-700 rounded-md px-2"
-                  >
-                    Edit
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {/* ---------------------- PLAYER LIST ---------------------------------- */}
+          <PlayerList
+            addListClasses="flex flex-wrap  gap-x-3 gap-y-5"
+            addItemClasses=""
+            button="Edit"
+            btnClass="border border-slate-700 rounded-md px-2"
+            btnAction={(player) => {
+              setPlayerToEdit(player)
+              setModalIsOpen(true)
+            }}
+          ></PlayerList>
         </section>
 
         <Link to="/timer">

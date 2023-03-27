@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import PlayerItem from "../../components/player-item/PlayerItem";
-import PlayerList from "../../components/player-list/PlayerList";
+import PlayerItem from "../../components/PlayerItem";
+import PlayerList from "../../components/PlayerList";
 import { setPlayerProperty } from "../../redux/players/players.action";
 
 const Timer = () => {
@@ -18,14 +18,23 @@ const Timer = () => {
   });
 
   let countDown = null;
+  const audioTime = new Audio("/assets/sounds/tink.wav");
+  const audioTime2 = new Audio("/assets/sounds/clap.wav");
+  const synth = window.speechSynthesis;
 
   useEffect(() => {
-    console.log(idTurn.current);
-    if (timerIsOn) {
+    if (timerIsOn && timer > 0) {
       countDown = setTimeout(() => {
         setTimer((oldTimer) => oldTimer - 1);
+        if (timer !== 1) {
+          audioTime.currentTime = 0 
+          audioTime.play()
+        } else {
+          audioTime2.currentTime = 0
+          audioTime2.play()
+        }
       }, 1000);
-    }
+    } else { setTimerIsOn(false) }
   }, [timer, timerIsOn, idTurn]);
 
   const nextTurn = (dir) => {
@@ -53,6 +62,15 @@ const Timer = () => {
         next: id,
       });
   };
+
+  const speak = (input) => {
+    const utterThis = new SpeechSynthesisUtterance(input)
+    synth.speak(utterThis)
+  }
+  const whoIsNext = () => {
+    const nextPlayer = playerList.find((player) => player.id === idTurn.next)
+    speak(nextPlayer.alias)
+  }
 
   return (
     <section className="fixed inset-0 h-screen w-full max-w-3xl py-5 flex flex-col items-center bg-slate-800 text-white">
@@ -84,14 +102,19 @@ const Timer = () => {
 
       {/* ---------------------- TIMER ---------------------------------- */}
       <section
-        className="h-3/6 w-full flex-center  border border-white"
-        onClick={() => nextTurn('next')}
+        className={`h-3/6 w-full flex-center  border border-white ${timer <= 5 ? "bg-rose-700" : "bg-emerald-400"}`}
+        onClick={() => {
+          nextTurn('next')
+          whoIsNext()
+        }}
       >
-        <div className="text-9xl">{timer}</div>
+        <div 
+        className={`text-9xl ${timer <= 3 && "scale-150"}`}
+        >{timer}</div>
       </section>
 
       {/* ----------------------- CONTROLLERS ----------------------------- */}
-      <section className="h-1/6 flex-center gap-10 ">
+      <section className="h-1/6 flex-center gap-10">
         <button className="w-16 h-16 "
         onClick={() => nextTurn('prev')}>
           <svg fill="currentColor" viewBox="0 0 32 32">
