@@ -6,7 +6,7 @@ import PlayerList from "../../components/PlayerList";
 import { setPlayerProperty } from "../../redux/players/players.action";
 
 const Timer = () => {
-  const { turnTime } = useSelector((state) => state.game);
+  const { turnTime, matchId } = useSelector((state) => state.game);
   const { playerList } = useSelector((state) => state.players);
   const [timer, setTimer] = useState(turnTime);
   const [timerIsOn, setTimerIsOn] = useState(false);
@@ -27,21 +27,23 @@ const Timer = () => {
       countDown = setTimeout(() => {
         setTimer((oldTimer) => oldTimer - 1);
         if (timer !== 1) {
-          audioTime.currentTime = 0 
-          audioTime.play()
+          audioTime.currentTime = 0;
+          audioTime.play();
         } else {
-          audioTime2.currentTime = 0
-          audioTime2.play()
+          audioTime2.currentTime = 0;
+          audioTime2.play();
         }
       }, 1000);
-    } else { setTimerIsOn(false) }
+    } else {
+      setTimerIsOn(false);
+    }
   }, [timer, timerIsOn, idTurn]);
 
   const nextTurn = (dir) => {
     clearTimeout(countDown);
     setTimer(turnTime);
-    dir === 'next' && nextPlayer(idTurn.current)
-    dir === 'prev' && previousPlayer(idTurn.current)
+    dir === "next" && nextPlayer(idTurn.current);
+    dir === "prev" && previousPlayer(idTurn.current);
   };
   const stopTimer = () => {
     clearTimeout(countDown);
@@ -49,37 +51,51 @@ const Timer = () => {
   };
 
   const nextPlayer = (id) => {
-      setIdTurn({
-        previous: id,
-        current: idTurn.next,
-        next: id < numPlayers ?  (idTurn.next !== numPlayers ? idTurn.next+1 : 1) : 2,
-      });
+    setIdTurn({
+      previous: id,
+      current: idTurn.next,
+      next:
+        id < numPlayers
+          ? idTurn.next !== numPlayers
+            ? idTurn.next + 1
+            : 1
+          : 2,
+    });
   };
   const previousPlayer = (id) => {
-      setIdTurn({
-        previous: idTurn.previous === 1 ? numPlayers : idTurn.previous -1,
-        current: idTurn.previous,
-        next: id,
-      });
+    setIdTurn({
+      previous: idTurn.previous === 1 ? numPlayers : idTurn.previous - 1,
+      current: idTurn.previous,
+      next: id,
+    });
   };
 
   const speak = (input) => {
-    const utterThis = new SpeechSynthesisUtterance(input)
-    synth.speak(utterThis)
-  }
+    const utterThis = new SpeechSynthesisUtterance(input);
+    synth.speak(utterThis);
+  };
   const whoIsNext = () => {
-    const nextPlayer = playerList.find((player) => player.id === idTurn.next)
-    speak(nextPlayer.alias)
-  }
+    const nextPlayer = playerList.find((player) => player.id === idTurn.next);
+    speak(nextPlayer.alias);
+  };
 
   return (
     <section className="fixed inset-0 h-screen w-full max-w-3xl py-5 flex flex-col items-center bg-slate-800 text-white">
       <div className="w-full flex items-center justify-around h-1/6">
-        <Link to="/settings" className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90">
+        <Link
+          to="/settings"
+          className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
+        >
           SETTINGS
         </Link>
-        <h2 className="font-bold text-4xl">TIMER</h2>
-        <Link to="/score-board" className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90">
+        <div>
+          <h2 className="font-bold text-4xl">TIMER</h2>
+          <h3 className="text-center">MATCH - {matchId}</h3>
+        </div>
+        <Link
+          to="/score-board"
+          className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
+        >
           SCORES
         </Link>
       </div>
@@ -102,21 +118,20 @@ const Timer = () => {
 
       {/* ---------------------- TIMER ---------------------------------- */}
       <section
-        className={`h-3/6 w-full flex-center  border border-white ${timer <= 5 ? "bg-rose-700" : "bg-emerald-400"}`}
+        className={`h-3/6 w-full flex-center  border border-white ${
+          timer <= 5 ? "bg-rose-700" : "bg-emerald-400"
+        }`}
         onClick={() => {
-          nextTurn('next')
-          whoIsNext()
+          nextTurn("next");
+          whoIsNext();
         }}
       >
-        <div 
-        className={`text-9xl ${timer <= 3 && "scale-150"}`}
-        >{timer}</div>
+        <div className={`text-9xl ${timer <= 3 && "scale-150"}`}>{timer}</div>
       </section>
 
       {/* ----------------------- CONTROLLERS ----------------------------- */}
       <section className="h-1/6 flex-center gap-10">
-        <button className="w-16 h-16 "
-        onClick={() => nextTurn('prev')}>
+        <button className="w-16 h-16 " onClick={() => nextTurn("prev")}>
           <svg fill="currentColor" viewBox="0 0 32 32">
             <title>previous</title>
             <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z"></path>
@@ -141,10 +156,7 @@ const Timer = () => {
           </button>
         )}
 
-        <button
-          className="w-16 h-16"
-          onClick={() => nextTurn('next')}
-        >
+        <button className="w-16 h-16" onClick={() => nextTurn("next")}>
           <svg fill="currentColor" viewBox="0 0 32 32">
             <title>next</title>
             <path d="M16 0c8.837 0 16 7.163 16 16s-7.163 16-16 16-16-7.163-16-16 7.163-16 16-16zM16 29c7.18 0 13-5.82 13-13s-5.82-13-13-13-13 5.82-13 13 5.82 13 13 13z"></path>

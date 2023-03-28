@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import PlayerItem from "../../components/PlayerItem";
 import PlayerEdit from "../../components/PlayerEdit"
 import { setLifePrice, setTime } from "../../redux/game/game.action";
 import {

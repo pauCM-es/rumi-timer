@@ -1,29 +1,45 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState, useEffect } from "react";
-import { setPlayer } from "../redux/players/players.action";
+import { useSelector } from "react-redux";
+import { accumulatePot } from "../redux/game/game.action";
+import { setPlayer, setPlayerProperty } from "../redux/players/players.action";
 
-const PlayerAddScore = ({ isOpen, setIsOpen, player }) => {
+const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
+  const { lifePrice } = useSelector((state) => state.game);
   const [addScore, setAddScore] = useState(0);
   const [newScore, setNewScore] = useState(parseInt(player.score));
 
   useEffect(() => {
-    let value = parseInt(player.score) + parseInt(addScore)
-    setNewScore(value)
-  },[addScore])
+    let value = parseInt(player.score) + parseInt(addScore);
+    setNewScore(value);
+  }, [addScore]);
 
   const savePlayer = (ev) => {
     ev.preventDefault();
     setPlayer(player.id, {
       ...player,
       score: newScore,
-      isAlive: newScore > 100 ? false : true
+      isAlive: newScore > 100 ? false : true,
     });
     setIsOpen(false);
   };
+
+  const resurrect = (ev) => {
+    ev.preventDefault();
+    setPlayer(player.id, {
+      ...player,
+      score: highestScore,
+      lifes: player.lifes+1,
+      isAlive: true
+    });
+    accumulatePot(lifePrice)
+    setIsOpen(false);
+  }
+
   const handleInput = (event) => {
     const { value } = event.target;
-    value && setAddScore(value)
-  }
+    setAddScore(value);
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -37,7 +53,10 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/70 grayscale z-30" aria-hidden="true" />
+          <div
+            className="fixed inset-0 bg-black/70 grayscale z-30"
+            aria-hidden="true"
+          />
         </Transition.Child>
 
         <div className="fixed inset-0 z-30 flex justify-center items-center p-2 text-xl">
@@ -55,21 +74,26 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player }) => {
                 as="h2"
                 className="font-bold mb-5 text-center text-2xl"
               >
-                {player.alias} - {newScore}pts.
+                {player.alias} - {newScore ? newScore : player.score}pts.
               </Dialog.Title>
-              <form onSubmit={savePlayer} className="flex justify-between">
+              <form onSubmit={player.isAlive ? savePlayer : resurrect} className="flex justify-between">
                 {/* ---------------------- SCORE INPUT ---------------------------------- */}
-                <label htmlFor="score" className="w-1/2">
-                  <h3>ADD SCORE:</h3>
-                  <input
-                    className="w-full mt-2 p-2 bg-slate-300 rounded-md"
-                    type="number"
-                    inputMode="numeric"
-                    name="score"
-                    value={addScore}
-                    onChange={handleInput}
-                  />
-                </label>
+                { player.isAlive 
+                  ? <label htmlFor="score" className="w-1/2">
+                    <h3>ADD SCORE:</h3>
+                    <input
+                      className="w-full mt-2 p-2 bg-slate-300 rounded-md"
+                      type="number"
+                      inputMode="numeric"
+                      name="score"
+                      onChange={handleInput}
+                    />
+                  </label>
+                  : <div className="pr-5">
+                    <p className="">WANNA RESURRECT?</p>
+                    <p className="text-sm">Your new score will be: <span className="font-bold text-lg">{highestScore}pts.</span></p>
+                  </div>
+                }
                 {/* ---------------------- BUTTONS ---------------------------------- */}
                 <div className="flex gap-5 items-end">
                   <button
