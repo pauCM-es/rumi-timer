@@ -12,6 +12,7 @@ const PlayerList = ({
   btnClass,
 }) => {
   const { playerList } = useSelector((state) => state.players);
+  const { playersWinning } = useSelector((state) => state.game);
   const { scoresLog } = useSelector((state) => state.game);
   const btnSound = new Audio(sounds.click);
 
@@ -24,6 +25,7 @@ const PlayerList = ({
               key={player.id}
               player={player}
               addItemClasses={addItemClasses}
+              crown={playersWinning.includes(player.id)}
             ></PlayerItem>
             {/* ---------------- BTN ACTION (EDIT / ADD SCORE)  / ALREADY SCORED ------------------- */}
             {player.isAlive && (

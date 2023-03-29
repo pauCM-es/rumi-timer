@@ -5,7 +5,7 @@ import PlayerItem from "../../components/PlayerItem";
 import { sounds, playAudio } from "../../utils/sounds";
 
 const Timer = () => {
-  const { turnTime, matchId } = useSelector((state) => state.game);
+  const { turnTime, matchId, playersWinning } = useSelector((state) => state.game);
   const { playerList } = useSelector((state) => state.players);
   const [timer, setTimer] = useState(turnTime);
   const [timerIsOn, setTimerIsOn] = useState(false);
@@ -116,13 +116,16 @@ const Timer = () => {
               player={playerList.find(
                 (player) => player.id === idTurn.previous
               )}
+              crown={playersWinning.includes(idTurn.previous)}
             ></PlayerItem>
             <PlayerItem
               player={playerList.find((player) => player.id === idTurn.current)}
+              crown={playersWinning.includes(idTurn.current)}
             ></PlayerItem>
             <PlayerItem
               addItemClasses="scale-75 grayscale"
               player={playerList.find((player) => player.id === idTurn.next)}
+              crown={playersWinning.includes(idTurn.next)}
             ></PlayerItem>
           </section>
         )}

@@ -38,7 +38,7 @@ const GameSettings = () => {
             <h3>TIME PER TURN</h3>
             <div className="flex gap-5 mt-3">
               <button
-                className="border border-slate-700 rounded-md w-6 aspect-square 
+                className="bg-white border border-slate-700 rounded-md w-6 aspect-square 
                 hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   playAudio(btnSound);
@@ -49,7 +49,7 @@ const GameSettings = () => {
               </button>
               <p>{turnTime} sg.</p>
               <button
-                className="border border-slate-700 rounded-md w-6 aspect-square 
+                className="bg-white border border-slate-700 rounded-md w-6 aspect-square 
                 hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   playAudio(btnSound);
@@ -65,7 +65,7 @@ const GameSettings = () => {
             <h3>RESURRECTION</h3>
             <div className="flex gap-5 mt-3">
               <button
-                className="border border-slate-700 rounded-md w-6 aspect-square 
+                className="bg-white border border-slate-700 rounded-md w-6 aspect-square 
                 hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   playAudio(btnSound);
@@ -80,7 +80,7 @@ const GameSettings = () => {
                   : `${Math.floor(lifePrice / 100)},${lifePrice % 100}€`}
               </p>
               <button
-                className="border border-slate-700 rounded-md w-6 aspect-square 
+                className="bg-white border border-slate-700 rounded-md w-6 aspect-square 
                 hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   playAudio(btnSound);
@@ -100,7 +100,7 @@ const GameSettings = () => {
             <div className="flex items-center gap-5">
               <button
                 type="button"
-                className="border border-slate-700 rounded-md w-6 h-6 hover:bg-slate-700 hover:text-white"
+                className="bg-white border border-slate-700 rounded-md w-6 h-6 hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   playAudio(btnSound);
                   playerList.length < 6 && addPlayer(playerList.length + 1);
@@ -110,7 +110,7 @@ const GameSettings = () => {
               </button>
               <button
                 type="button"
-                className="border border-slate-700 rounded-md w-6 h-6 hover:bg-slate-700 hover:text-white"
+                className="bg-white border border-slate-700 rounded-md w-6 h-6 hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   playAudio(btnSound);
                   playerList.length > 0 && removeLastPlayer();
@@ -125,7 +125,7 @@ const GameSettings = () => {
             addListClasses=" flex-wrap gap-y-5"
             addItemClasses=""
             buttonText="Edit"
-            btnClass="border border-slate-700 rounded-md px-2 mt-2 hover:bg-slate-700 hover:text-white"
+            btnClass="bg-white border border-slate-700 rounded-md px-2 mt-2 hover:bg-slate-700 hover:text-white"
             btnAction={(player) => {
               setPlayerToEdit(player);
               setModalIsOpen(true);

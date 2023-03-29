@@ -38,3 +38,14 @@ export const playerScoring = (playerId) => {
     payload: playerId
   })
 }
+export const setPlayersWinning = (playersId) => {
+  dispatch({
+    type: 'PLAYERS_WINNING',
+    payload: playersId
+  })
+}
+export const cleanWinners = () => {
+  dispatch({
+    type: 'CLEAN_WINNERS',
+  })
+}

@@ -6,7 +6,7 @@ import { setPlayer, setPlayerProperty } from "../redux/players/players.action";
 import { sounds, playAudio } from "../utils/sounds";
 
 const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
-  const { lifePrice } = useSelector((state) => state.game);
+  const { lifePrice, isGameOver } = useSelector((state) => state.game);
   const [addScore, setAddScore] = useState(0);
   const [newScore, setNewScore] = useState(parseInt(player.score));
 
@@ -85,7 +85,7 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
                 {player.alias} - {newScore ? newScore : player.score}pts.
               </Dialog.Title>
               <form
-                onSubmit={player.isAlive ? savePlayer : resurrect}
+                onSubmit={player.isAlive && !isGameOver ? savePlayer : resurrect}
                 className="flex justify-between"
               >
                 {/* ---------------------- SCORE INPUT ---------------------------------- */}

@@ -3,24 +3,46 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import PlayerAddScore from "../../components/PlayerAddScore";
 import PlayerList from "../../components/PlayerList";
-import { nextMatch } from "../../redux/game/game.action";
+import {
+  cleanWinners,
+  gameOver,
+  nextMatch,
+  setPlayersWinning,
+} from "../../redux/game/game.action";
 
 const ScoreBoard = () => {
-  const { matchId, potReward, scoresLog } = useSelector((state) => state.game);
+  const { matchId, potReward, scoresLog, isGameOver } = useSelector((state) => state.game);
   const { playerList } = useSelector((state) => state.players);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [playerScoring, setPlayerScoring] = useState("");
   const [highestScore, setHighestScore] = useState(0);
+  const [lowestScore, setLowestScore] = useState(0);
 
+  // any time a player add their score, scores are evaluated to know:
+  // => higest score - score dead players are gonna resurrect with.
+  // => lowest score - filter players and gives winning crowns (can be mora than one).
+  // Also evaluate if the game is over, when all but 1 player, are dead.
   useEffect(() => {
+    let scores = [];
     playerList.forEach((player) => {
-      player.isAlive &&
-        player.score > highestScore &&
-        setHighestScore(player.score);
+      player.isAlive && scores.push(player.score);
     });
-  }, [playerList]);
+    let max = Math.max(...scores);
+    let min = Math.min(...scores);
+    setHighestScore(max);
+    setLowestScore(min);
+    cleanWinners();
+    let deadPlayers = 0
+    playerList
+      .forEach((player) => {
+        player.score === min && setPlayersWinning(player.id);
+        !player.isAlive && deadPlayers++
+      })
 
+    // is game over?
+    deadPlayers === playerList.length-1 && gameOver()
+  }, [scoresLog]);
 
   return (
     <section className="h-full w-screen bg-slate-100">
@@ -36,7 +58,10 @@ const ScoreBoard = () => {
       {/* --------------------- NAVBAR --------------------------- */}
       <div className="bg-teal-700 py-5 mb-3 text-white">
         <h2 className="font-bold text-4xl text-center">SCOREBOARD</h2>
-        <h3 className="text-black font-bold text-lg text-center"> Match {matchId}</h3>
+        <h3 className="text-black font-bold text-lg text-center">
+          {" "}
+          Match {matchId}
+        </h3>
       </div>
       {/* --------------------- PLAYERLIST --------------------------- */}
       <PlayerList
@@ -62,7 +87,12 @@ const ScoreBoard = () => {
               : `${Math.floor(potReward / 100)},${potReward % 100}€`}
           </p>
         </div>
-        <Link to={playerList.length === scoresLog.length ? "/timer" : "/score-board"} className=" flex justify-center items-center">
+        <Link
+          to={
+            playerList.length === scoresLog.length ? "/timer" : "/score-board"
+          }
+          className=" flex justify-center items-center"
+        >
           <button
             onClick={() => {
               playerList.length === scoresLog.length && nextMatch();
@@ -73,6 +103,12 @@ const ScoreBoard = () => {
           </button>
         </Link>
       </section>
+      {
+        isGameOver && <div>
+          <h2>GAME OVER</h2>
+          <h3>The winner is { playerList.find(player => player.isAlive).alias }</h3>
+        </div>
+      }
     </section>
   );
 };

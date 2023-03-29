@@ -30,9 +30,13 @@ export const gameReducer = (state = INITIAL_STATE, action) => {
       ...state,
       scoresLog: [],
     },
-    PLAYER_WINNING: {
+    PLAYERS_WINNING: {
       ...state,
-      playerWinning: action.payload,
+      playersWinning: [ ...state.playersWinning, action.payload],
+    },
+    CLEAN_WINNERS: {
+      ...state,
+      playersWinning: [],
     },
   };
 
