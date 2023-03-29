@@ -26,7 +26,7 @@ const PlayerList = ({
               key={player.id}
               player={player}
               addItemClasses={addItemClasses}
-              crown='true'
+              // crown={isWinning}
             ></PlayerItem>
             {player.isAlive && (
               <button className={btnClass} onClick={() => {
@@ -41,7 +41,7 @@ const PlayerList = ({
                 playAudio(btnSound)
                 btnAction(player)
                 }}>
-                  <img src="./assets/icons/skull.png" className="w-8" />
+                  <img src="./assets/icons/skull.png" alt="skull icon" className="w-8" />
               </button>
             )}
           </div>

@@ -85,112 +85,117 @@ const Timer = () => {
   };
 
   return (
-    <section className="fixed inset-0 h-screen w-full max-w-3xl py-5 flex flex-col items-center bg-slate-800 text-white">
-      <div className="w-full flex items-center justify-around h-1/6">
-        <Link
-          to="/settings"
-          onClick={() => playAudio(btnSound)}
-          className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
-        >
-          SETTINGS
-        </Link>
-        <div>
-          <h2 className="font-bold text-4xl">TIMER</h2>
-          <h3 className="text-center">MATCH - {matchId}</h3>
-        </div>
-        <Link
-          to="/score-board"
-          onClick={() => playAudio(btnSound)}
-          className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
-        >
-          SCORES
-        </Link>
-      </div>
-      {/* --------------------- PLAYER LIST --------------------------- */}
-      {playerList && (
-        <section className="h-fit w-full flex justify-evenly">
-          <PlayerItem
-            addItemClasses="scale-75 grayscale"
-            player={playerList.find((player) => player.id === idTurn.previous)}
-          ></PlayerItem>
-          <PlayerItem
-            player={playerList.find((player) => player.id === idTurn.current)}
-          ></PlayerItem>
-          <PlayerItem
-            addItemClasses="scale-75 grayscale"
-            player={playerList.find((player) => player.id === idTurn.next)}
-          ></PlayerItem>
+    <div className="bg-slate-800 w-screen h-full">
+      {/* --------------------- NAVABR --------------------------- */}
+      <section className="max-w-3xl h-full py-5 m-auto flex-col-center text-white">
+        <section className="w-full h-1/6 mb-5 flex items-center justify-around bg-slate-600">
+          <Link
+            to="/settings"
+            onClick={() => playAudio(btnSound)}
+            className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
+          >
+            SETTINGS
+          </Link>
+          <div>
+            <h2 className="font-bold text-4xl">TIMER</h2>
+            <h3 className="text-center">MATCH - {matchId}</h3>
+          </div>
+          <Link
+            to="/score-board"
+            onClick={() => playAudio(btnSound)}
+            className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
+          >
+            SCORES
+          </Link>
         </section>
-      )}
-
-      {/* ---------------------- TIMER ---------------------------------- */}
-      <section
-        className={`h-3/6 w-full flex-center  border border-white ${
-          timer <= 5 ? "bg-rose-700" : "bg-emerald-400"
-        }`}
-        onClick={() => {
-          nextTurn("next");
-          whoIsNext();
-        }}
-      >
-        <div className={`text-9xl ${timer <= 3 && "scale-150"}`}>{timer}</div>
-      </section>
-
-      {/* ----------------------- CONTROLLERS ----------------------------- */}
-      <section className="h-1/6 flex-center gap-10">
-        <button
-          className="w-16 h-16 "
-          onClick={() => {
-            playAudio(btnSound);
-            nextTurn("prev");
-          }}
-        >
-          <svg fill="currentColor" viewBox="0 0 32 32">
-            <title>previous</title>
-            <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z"></path>
-            <path d="M14 16l8-6v12z"></path>
-            <path d="M10 10h4v12h-4v-12z"></path>
-          </svg>
-        </button>
-
-        {timerIsOn ? (
-          <button
-            className="bg-rose-700 text-white text-2xl w-24 border-2 border-white rounded-lg px-3 py-1"
-            onClick={() => {
-              speak("stop");
-              stopTimer();
-            }}
-          >
-            STOP
-          </button>
-        ) : (
-          <button
-            className="bg-teal-700 text-white text-2xl w-24 border-2 border-white rounded-lg px-3 py-1"
-            onClick={() => {
-              speak("start");
-              setTimerIsOn(true);
-            }}
-          >
-            START
-          </button>
+        {/* --------------------- PLAYER LIST --------------------------- */}
+        {playerList && (
+          <section className="h-fit w-full flex justify-evenly">
+            <PlayerItem
+              addItemClasses="scale-75 grayscale"
+              player={playerList.find(
+                (player) => player.id === idTurn.previous
+              )}
+            ></PlayerItem>
+            <PlayerItem
+              player={playerList.find((player) => player.id === idTurn.current)}
+            ></PlayerItem>
+            <PlayerItem
+              addItemClasses="scale-75 grayscale"
+              player={playerList.find((player) => player.id === idTurn.next)}
+            ></PlayerItem>
+          </section>
         )}
 
-        <button
-          className="w-16 h-16"
+        {/* ---------------------- TIMER ---------------------------------- */}
+        <section
+          className={`h-3/6 w-full m-5 flex-center ${
+            timer <= 5 ? "bg-rose-700" : "bg-emerald-400"
+          }`}
           onClick={() => {
-            playAudio(btnSound);
             nextTurn("next");
+            whoIsNext();
           }}
         >
-          <svg fill="currentColor" viewBox="0 0 32 32">
-            <title>next</title>
-            <path d="M16 0c8.837 0 16 7.163 16 16s-7.163 16-16 16-16-7.163-16-16 7.163-16 16-16zM16 29c7.18 0 13-5.82 13-13s-5.82-13-13-13-13 5.82-13 13 5.82 13 13 13z"></path>
-            <path d="M18 16l-8-6v12z"></path>
-            <path d="M22 10h-4v12h4v-12z"></path>
-          </svg>
-        </button>
+          <div className={`text-9xl ${timer <= 3 && "scale-150"}`}>{timer}</div>
+        </section>
+
+        {/* ----------------------- CONTROLLERS ----------------------------- */}
+        <section className="h-1/6 w-full flex-center gap-10 bg-slate-600">
+          <button
+            className="w-16 h-16 "
+            onClick={() => {
+              playAudio(btnSound);
+              nextTurn("prev");
+            }}
+          >
+            <svg fill="currentColor" viewBox="0 0 32 32">
+              <title>previous</title>
+              <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z"></path>
+              <path d="M14 16l8-6v12z"></path>
+              <path d="M10 10h4v12h-4v-12z"></path>
+            </svg>
+          </button>
+
+          {timerIsOn ? (
+            <button
+              className="bg-rose-700 text-white text-2xl w-24 border-2 border-white rounded-lg px-3 py-1"
+              onClick={() => {
+                speak("stop");
+                stopTimer();
+              }}
+            >
+              STOP
+            </button>
+          ) : (
+            <button
+              className="bg-teal-700 text-white text-2xl w-24 border-2 border-white rounded-lg px-3 py-1"
+              onClick={() => {
+                speak("start");
+                setTimerIsOn(true);
+              }}
+            >
+              START
+            </button>
+          )}
+
+          <button
+            className="w-16 h-16"
+            onClick={() => {
+              playAudio(btnSound);
+              nextTurn("next");
+            }}
+          >
+            <svg fill="currentColor" viewBox="0 0 32 32">
+              <title>next</title>
+              <path d="M16 0c8.837 0 16 7.163 16 16s-7.163 16-16 16-16-7.163-16-16 7.163-16 16-16zM16 29c7.18 0 13-5.82 13-13s-5.82-13-13-13-13 5.82-13 13 5.82 13 13 13z"></path>
+              <path d="M18 16l-8-6v12z"></path>
+              <path d="M22 10h-4v12h4v-12z"></path>
+            </svg>
+          </button>
+        </section>
       </section>
-    </section>
+    </div>
   );
 };
 

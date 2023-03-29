@@ -16,6 +16,7 @@ const PlayerItem = ({ player, addItemClasses, crown }) => {
           !player.isAlive && "grayscale"
         }`}
       >
+        {crown && <img src="./assets/icons/crown.png" alt="crown" className="absolute w-8 -top-4 right-0 rotate-[40deg]"/>}
         <img
           className="w-20 aspect-square rounded-full"
           src={player.avatar}
