@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import PlayerItem from "./PlayerItem";
 import { sounds, playAudio } from "../utils/sounds";
 
-
 const PlayerList = ({
   addListClasses,
   addItemClasses,
@@ -12,10 +11,9 @@ const PlayerList = ({
   btnAction,
   btnClass,
 }) => {
-
   const { playerList } = useSelector((state) => state.players);
+  const { scoresLog } = useSelector((state) => state.game);
   const btnSound = new Audio(sounds.click);
-
 
   return (
     <div className={`max-w-[360px] mx-auto flex ${addListClasses}`}>
@@ -26,22 +24,42 @@ const PlayerList = ({
               key={player.id}
               player={player}
               addItemClasses={addItemClasses}
-              // crown={isWinning}
             ></PlayerItem>
+            {/* ---------------- BTN ACTION (EDIT / ADD SCORE)  / ALREADY SCORED ------------------- */}
             {player.isAlive && (
-              <button className={btnClass} onClick={() => {
-                playAudio(btnSound)
-                btnAction(player)
-                }}>
-                {buttonText}
+              <button
+                className={btnClass}
+                onClick={() => {
+                  playAudio(btnSound);
+                  !scoresLog.includes(player.id) && btnAction(player);
+                }}
+              >
+                {!scoresLog.includes(player.id) ? (
+                  buttonText
+                ) : (
+                  <img
+                    src="./assets/icons/checkmark.svg"
+                    alt="checkmark icon"
+                    className="w-4"
+                  />
+                )}
               </button>
             )}
+            {/* ---------------- BTN RESURRECT ------------------- */}
+
             {!player.isAlive && (
-              <button className={btnClass} onClick={() => {
-                playAudio(btnSound)
-                btnAction(player)
-                }}>
-                  <img src="./assets/icons/skull.png" alt="skull icon" className="w-8" />
+              <button
+                className={btnClass}
+                onClick={() => {
+                  playAudio(btnSound);
+                  playerList.length === scoresLog.length && btnAction(player);
+                }}
+              >
+                <img
+                  src="./assets/icons/skull.png"
+                  alt="skull icon"
+                  className="w-8"
+                />
               </button>
             )}
           </div>

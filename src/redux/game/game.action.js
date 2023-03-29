@@ -23,9 +23,18 @@ export const nextMatch = () => {
   dispatch({
     type: 'NEXT_MATCH'
   })
+  dispatch({
+    type: 'CLEAN_LOG'
+  })
 }
 export const gameOver = () => {
   dispatch({
     type: 'GAMEOVER'
+  })
+}
+export const playerScoring = (playerId) => {
+  dispatch({
+    type: 'SCORES_LOG',
+    payload: playerId
   })
 }

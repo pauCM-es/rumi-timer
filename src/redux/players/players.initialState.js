@@ -62,6 +62,6 @@ export const INITIAL_STATE = {
     color: '#94a3b8',
     score: 0,
     lifes: 0,
-    isAlive: true
+    isAlive: true,
   }
 }

@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { accumulatePot } from "../redux/game/game.action";
+import { accumulatePot, playerScoring } from "../redux/game/game.action";
 import { setPlayer, setPlayerProperty } from "../redux/players/players.action";
 import { sounds, playAudio } from "../utils/sounds";
 
@@ -12,6 +12,7 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
 
   const btnSound = new Audio(sounds.click);
   const coinSound = new Audio(sounds.coin);
+  const clickSound = new Audio(sounds.melodicClick);
 
   useEffect(() => {
     let value = parseInt(player.score) + parseInt(addScore);
@@ -25,6 +26,8 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
       score: newScore,
       isAlive: newScore > 100 ? false : true,
     });
+    playerScoring(player.id);
+    playAudio(clickSound);
     setIsOpen(false);
   };
 
@@ -33,13 +36,13 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
     setPlayer(player.id, {
       ...player,
       score: highestScore,
-      lifes: player.lifes+1,
-      isAlive: true
+      lifes: player.lifes + 1,
+      isAlive: true,
     });
-    accumulatePot(lifePrice)
-    playAudio(coinSound)
+    accumulatePot(lifePrice);
+    playAudio(coinSound);
     setIsOpen(false);
-  }
+  };
 
   const handleInput = (event) => {
     const { value } = event.target;
@@ -81,10 +84,13 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
               >
                 {player.alias} - {newScore ? newScore : player.score}pts.
               </Dialog.Title>
-              <form onSubmit={player.isAlive ? savePlayer : resurrect} className="flex justify-between">
+              <form
+                onSubmit={player.isAlive ? savePlayer : resurrect}
+                className="flex justify-between"
+              >
                 {/* ---------------------- SCORE INPUT ---------------------------------- */}
-                { player.isAlive 
-                  ? <label htmlFor="score" className="w-1/2">
+                {player.isAlive ? (
+                  <label htmlFor="score" className="w-1/2">
                     <h3>ADD SCORE:</h3>
                     <input
                       className="w-full mt-2 p-2 bg-slate-300 rounded-md"
@@ -94,17 +100,26 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
                       onChange={handleInput}
                     />
                   </label>
-                  : <div className="pr-5">
+                ) : (
+                  <div className="pr-5">
                     <p className="">WANNA RESURRECT?</p>
-                    <p className="text-sm">Your new score will be: <span className="font-bold text-lg">{highestScore}pts.</span></p>
+                    <p className="text-sm">
+                      Your new score will be:{" "}
+                      <span className="font-bold text-lg">
+                        {highestScore}pts.
+                      </span>
+                    </p>
                   </div>
-                }
+                )}
                 {/* ---------------------- BUTTONS ---------------------------------- */}
                 <div className="flex gap-5 items-end">
                   <button
                     className="border b-2 border-rose-700 p-2 rounded-md w-12 h-fit text-rose-700 
                   hover:bg-rose-700 hover:text-white"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      playAudio(btnSound);
+                      setIsOpen(false);
+                    }}
                   >
                     X
                   </button>

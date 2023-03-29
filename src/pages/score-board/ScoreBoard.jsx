@@ -6,13 +6,12 @@ import PlayerList from "../../components/PlayerList";
 import { nextMatch } from "../../redux/game/game.action";
 
 const ScoreBoard = () => {
-  const { lifePrice, matchId, potReward } = useSelector((state) => state.game);
+  const { matchId, potReward, scoresLog } = useSelector((state) => state.game);
   const { playerList } = useSelector((state) => state.players);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [playerScoring, setPlayerScoring] = useState("");
   const [highestScore, setHighestScore] = useState(0);
-  const [scoresLog, setScoresLog] = useState([3]);
 
   useEffect(() => {
     playerList.forEach((player) => {
@@ -21,6 +20,7 @@ const ScoreBoard = () => {
         setHighestScore(player.score);
     });
   }, [playerList]);
+
 
   return (
     <section className="h-full w-screen bg-slate-100">
@@ -62,10 +62,10 @@ const ScoreBoard = () => {
               : `${Math.floor(potReward / 100)},${potReward % 100}€`}
           </p>
         </div>
-        <Link to="/timer" className=" flex justify-center items-center">
+        <Link to={playerList.length === scoresLog.length ? "/timer" : "/score-board"} className=" flex justify-center items-center">
           <button
             onClick={() => {
-              nextMatch();
+              playerList.length === scoresLog.length && nextMatch();
             }}
             className="bg-slate-700 text-white text-2xl border-2 border-white rounded-lg px-3 py-1 h-12"
           >

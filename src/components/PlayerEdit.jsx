@@ -3,8 +3,14 @@ import { Dialog, Transition } from "@headlessui/react";
 import { RadioGroup } from "@headlessui/react";
 import { setPlayer } from "../redux/players/players.action";
 import { characters } from "../utils/characters";
+import { sounds, playAudio } from "../utils/sounds";
 
 const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
+  const [editingPlayer, setEditingPlayer] = useState(player);
+  const [colorSelected, setColorSelected] = useState(player.color || colors[0]);
+  const [characterSelected, setCharacterSelected] = useState(
+    player.avatar || characters[0]
+  );
   const colors = [
     "#0d9488",
     "#3b82f6",
@@ -13,11 +19,8 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
     "#701a75",
     "#fcd34d",
   ];
-  const [editingPlayer, setEditingPlayer] = useState(player);
-  const [colorSelected, setColorSelected] = useState(player.color || colors[0]);
-  const [characterSelected, setCharacterSelected] = useState(
-    player.avatar || characters[0]
-  );
+  const clickSound = new Audio(sounds.melodicClick);
+  const btnSound = new Audio(sounds.click);
 
   useEffect(() => {
     setEditingPlayer({
@@ -39,6 +42,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
   const savePlayer = (ev) => {
     ev.preventDefault();
     setPlayer(editingPlayer.id, editingPlayer);
+    playAudio(clickSound);
     setIsOpen(false);
   };
 
@@ -123,9 +127,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                         key={char}
                         value={char}
                         className={({ checked }) =>
-                          checked
-                            ? "w-[23%]"
-                            : "w-[23%] grayscale"
+                          checked ? "w-[23%]" : "w-[23%] grayscale"
                         }
                       >
                         <img
@@ -142,7 +144,10 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                   <button
                     className="border b-2 border-rose-700 p-2 rounded-md w-36 text-rose-700 
                   hover:bg-rose-700 hover:text-white"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      playAudio(btnSound);
+                      setIsOpen(false);
+                    }}
                   >
                     Cancel
                   </button>
