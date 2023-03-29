@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import PlayerItem from "../../components/PlayerItem";
-import PlayerList from "../../components/PlayerList";
-import { setPlayerProperty } from "../../redux/players/players.action";
+import { sounds, playAudio } from "../../utils/sounds";
 
 const Timer = () => {
   const { turnTime, matchId } = useSelector((state) => state.game);
@@ -18,8 +17,9 @@ const Timer = () => {
   });
 
   let countDown = null;
-  const audioTime = new Audio("/assets/sounds/tink.wav");
-  const audioTime2 = new Audio("/assets/sounds/clap.wav");
+  const audioTimer = new Audio(sounds.heartbeat);
+  const audioTimerEnd = new Audio(sounds.explosion);
+  const btnSound = new Audio(sounds.click);
   const synth = window.speechSynthesis;
 
   useEffect(() => {
@@ -27,11 +27,16 @@ const Timer = () => {
       countDown = setTimeout(() => {
         setTimer((oldTimer) => oldTimer - 1);
         if (timer !== 1) {
-          audioTime.currentTime = 0;
-          audioTime.play();
+          audioTimer.currentTime = 0;
+          audioTimer.play();
+          timer <= 5 &&
+            setTimeout(() => {
+              audioTimer.currentTime = 0;
+              audioTimer.play();
+            }, 500);
         } else {
-          audioTime2.currentTime = 0;
-          audioTime2.play();
+          audioTimerEnd.currentTime = 0;
+          audioTimerEnd.play();
         }
       }, 1000);
     } else {
@@ -84,6 +89,7 @@ const Timer = () => {
       <div className="w-full flex items-center justify-around h-1/6">
         <Link
           to="/settings"
+          onClick={() => playAudio(btnSound)}
           className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
         >
           SETTINGS
@@ -94,6 +100,7 @@ const Timer = () => {
         </div>
         <Link
           to="/score-board"
+          onClick={() => playAudio(btnSound)}
           className="text-xl border py-1 rounded-md w-20 text-center hover:scale-90"
         >
           SCORES
@@ -131,7 +138,13 @@ const Timer = () => {
 
       {/* ----------------------- CONTROLLERS ----------------------------- */}
       <section className="h-1/6 flex-center gap-10">
-        <button className="w-16 h-16 " onClick={() => nextTurn("prev")}>
+        <button
+          className="w-16 h-16 "
+          onClick={() => {
+            playAudio(btnSound);
+            nextTurn("prev");
+          }}
+        >
           <svg fill="currentColor" viewBox="0 0 32 32">
             <title>previous</title>
             <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM16 29c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13z"></path>
@@ -143,20 +156,32 @@ const Timer = () => {
         {timerIsOn ? (
           <button
             className="bg-rose-700 text-white text-2xl w-24 border-2 border-white rounded-lg px-3 py-1"
-            onClick={() => stopTimer()}
+            onClick={() => {
+              speak("stop");
+              stopTimer();
+            }}
           >
             STOP
           </button>
         ) : (
           <button
             className="bg-teal-700 text-white text-2xl w-24 border-2 border-white rounded-lg px-3 py-1"
-            onClick={() => setTimerIsOn(true)}
+            onClick={() => {
+              speak("start");
+              setTimerIsOn(true);
+            }}
           >
             START
           </button>
         )}
 
-        <button className="w-16 h-16" onClick={() => nextTurn("next")}>
+        <button
+          className="w-16 h-16"
+          onClick={() => {
+            playAudio(btnSound);
+            nextTurn("next");
+          }}
+        >
           <svg fill="currentColor" viewBox="0 0 32 32">
             <title>next</title>
             <path d="M16 0c8.837 0 16 7.163 16 16s-7.163 16-16 16-16-7.163-16-16 7.163-16 16-16zM16 29c7.18 0 13-5.82 13-13s-5.82-13-13-13-13 5.82-13 13 5.82 13 13 13z"></path>

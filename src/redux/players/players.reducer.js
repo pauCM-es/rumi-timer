@@ -10,7 +10,7 @@ export const playersReducer = ( state = INITIAL_STATE, action ) => {
 
     REMOVE_PLAYER: {
       ...state,
-      playerList: state.playerList.filter(player => player.id !== state.playerList.length)
+      playerList: [...state.playerList.filter(player => player.id !== state.playerList.length)]
     },
 
     SET_LIST: {

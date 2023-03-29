@@ -19,10 +19,9 @@ export const accumulatePot = ( money ) => {
     payload: money
   })
 }
-export const nextMatch = ( number ) => {
+export const nextMatch = () => {
   dispatch({
-    type: 'NEXT_MATCH',
-    payload: number
+    type: 'NEXT_MATCH'
   })
 }
 export const gameOver = () => {

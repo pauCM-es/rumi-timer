@@ -2,28 +2,33 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import PlayerEdit from "../../components/PlayerEdit"
+import PlayerEdit from "../../components/PlayerEdit";
 import { setLifePrice, setTime } from "../../redux/game/game.action";
 import {
   addPlayer,
   removeLastPlayer,
 } from "../../redux/players/players.action";
 import PlayerList from "../../components/PlayerList";
+import { sounds, playAudio } from "../../utils/sounds";
 
 const GameSettings = () => {
   const { turnTime, lifePrice } = useSelector((state) => state.game);
   const { playerList } = useSelector((state) => state.players);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [playerToEdit, setPlayerToEdit] = useState('');
+  const [playerToEdit, setPlayerToEdit] = useState("");
 
-  useEffect(() => {
-    console.log(playerList);
-  }, [playerList]);
+  const btnSound = new Audio(sounds.click);
 
   return (
     <Fragment>
-      { modalIsOpen && <PlayerEdit isOpen={modalIsOpen} setIsOpen={setModalIsOpen} player={playerToEdit}></PlayerEdit>}
+      {modalIsOpen && (
+        <PlayerEdit
+          isOpen={modalIsOpen}
+          setIsOpen={setModalIsOpen}
+          player={playerToEdit}
+        ></PlayerEdit>
+      )}
 
       <section className="p-5 flex flex-col items-center">
         <h1 className="text-center text-xl font-bold">GAME SETTINGS</h1>
@@ -33,6 +38,7 @@ const GameSettings = () => {
           <div className="flex gap-5">
             <button
               onClick={() => {
+                playAudio(btnSound);
                 turnTime > 5 && setTime(turnTime - 5);
               }}
             >
@@ -41,6 +47,7 @@ const GameSettings = () => {
             <p>{turnTime}</p>
             <button
               onClick={() => {
+                playAudio(btnSound);
                 turnTime < 60 && setTime(turnTime + 5);
               }}
             >
@@ -54,6 +61,7 @@ const GameSettings = () => {
           <div className="flex gap-5">
             <button
               onClick={() => {
+                playAudio(btnSound);
                 lifePrice > 10 && setLifePrice(lifePrice - 10);
               }}
             >
@@ -66,6 +74,7 @@ const GameSettings = () => {
             </p>
             <button
               onClick={() => {
+                playAudio(btnSound);
                 lifePrice < 200 && setLifePrice(lifePrice + 10);
               }}
             >
@@ -81,6 +90,7 @@ const GameSettings = () => {
               <button
                 type="button"
                 onClick={() => {
+                  playAudio(btnSound);
                   playerList.length < 6 && addPlayer(playerList.length + 1);
                 }}
               >
@@ -89,6 +99,7 @@ const GameSettings = () => {
               <button
                 type="button"
                 onClick={() => {
+                  playAudio(btnSound);
                   playerList.length > 0 && removeLastPlayer();
                 }}
               >
@@ -98,19 +109,22 @@ const GameSettings = () => {
           </div>
           {/* ---------------------- PLAYER LIST ---------------------------------- */}
           <PlayerList
-            addListClasses="flex flex-wrap  gap-x-3 gap-y-5"
+            addListClasses=" flex-wrap gap-y-5"
             addItemClasses=""
-            button="Edit"
+            buttonText="Edit"
             btnClass="border border-slate-700 rounded-md px-2"
             btnAction={(player) => {
-              setPlayerToEdit(player)
-              setModalIsOpen(true)
+              setPlayerToEdit(player);
+              setModalIsOpen(true);
             }}
           ></PlayerList>
         </section>
 
         <Link to="/timer">
-          <button className="bg-slate-700 text-white text-2xl border-2 border-white rounded-lg px-3 py-1 ">
+          <button
+            onClick={() => playAudio(btnSound)}
+            className="bg-slate-700 text-white text-2xl border-2 border-white rounded-lg px-3 py-1 "
+          >
             START
           </button>
         </Link>

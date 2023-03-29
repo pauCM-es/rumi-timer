@@ -16,7 +16,7 @@ export const gameReducer = ( state = INITIAL_STATE, action ) => {
     },
     NEXT_MATCH: {
       ...state,
-      matchId: state.matchId++
+      matchId: state.matchId+1
     },
     GAMEOVER: {
       ...state,

@@ -38,7 +38,7 @@ const ScoreBoard = () => {
       </div>
 
       <PlayerList
-        addListClasses="flex-wrap justify-around gap-y-5"
+        addListClasses="flex-wrap gap-y-5"
         buttonText="ADD SCORE"
         btnClass="border border-slate-700 rounded-md p-1 mt-2 text-sm hover:bg-yellow-400"
         btnAction={(player) => {

@@ -3,11 +3,15 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { accumulatePot } from "../redux/game/game.action";
 import { setPlayer, setPlayerProperty } from "../redux/players/players.action";
+import { sounds, playAudio } from "../utils/sounds";
 
 const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
   const { lifePrice } = useSelector((state) => state.game);
   const [addScore, setAddScore] = useState(0);
   const [newScore, setNewScore] = useState(parseInt(player.score));
+
+  const btnSound = new Audio(sounds.click);
+  const coinSound = new Audio(sounds.coin);
 
   useEffect(() => {
     let value = parseInt(player.score) + parseInt(addScore);
@@ -33,6 +37,7 @@ const PlayerAddScore = ({ isOpen, setIsOpen, player, highestScore }) => {
       isAlive: true
     });
     accumulatePot(lifePrice)
+    playAudio(coinSound)
     setIsOpen(false);
   }
 
