@@ -120,7 +120,7 @@ const PlayerEdit = ({ isOpen, setIsOpen, player }) => {
                   onChange={setCharacterSelected}
                   className="flex flex-col gap-3 mt-10"
                 >
-                  <RadioGroup.Label>CHOSE AVATAR</RadioGroup.Label>
+                  <RadioGroup.Label>CHOOSE AVATAR</RadioGroup.Label>
                   <div className="flex flex-wrap justify-between gap-y-3">
                     {characters.lowerDecks.map((char) => (
                       <RadioGroup.Option
