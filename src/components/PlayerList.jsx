@@ -17,7 +17,7 @@ const PlayerList = ({
   const btnSound = new Audio(sounds.click);
 
   return (
-    <div className={`max-w-[360px] mx-auto flex ${addListClasses}`}>
+    <div className={`w-[360px] mx-auto flex ${addListClasses}`}>
       {playerList.map((player) => {
         return (
           <div className="flex-col-center w-1/3">
